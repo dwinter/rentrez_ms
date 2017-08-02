@@ -1,0 +1,15 @@
+Package: tidytaxon
+Type: Package
+Title: The NCBI Taxonomy In Tidy Format
+Version: 0.1.0
+Author: David Winter
+Maintainer: David Winter <david.winter@gmail.com>
+Description: Represent part of the NCBI taxonmy in tidy format.
+Imports:
+    XML,
+    rentrez
+License: MIT
+Encoding: UTF-8
+LazyData: true
+RoxygenNote: 6.0.1
+NeedsCompilation: no
