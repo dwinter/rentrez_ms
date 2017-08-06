@@ -39,7 +39,7 @@ controlled vocabulary containing $`r count_recs("MeSH", 1e3,0)`$ thousand unique
 
 The NCBI provides access to a total of $`r length(entrez_dbs())`$ databases 
 through a web interface,public FTP sites and a REST API called Entrez Programming Utilities (EUtils). A
-number of R packages from the Bioconductor project (e.g., \\BIOpkg{genomes}, 
+R packages from the Bioconductor project (e.g., \\BIOpkg{genomes}, 
 \\BIOpkg{RMassBank} and \\BIOpkg{MeSHSim}) or available from CRAN 
 (e.g., \\CRANpkg{ape}, \\CRANpkg{RISmed} and \\CRANpkg{pubmed.mineR}) 
 take advantage of the Eutils API to perform specific tasks. Two packages,
@@ -107,7 +107,7 @@ pkg_paper_summs
 ```
 
 In addition to matching each of the EUtils endpoints, \\pkg{rentrez} provides a
-number of utility functions that facilitate common workflows. For example, the
+utility functions that facilitate common workflows. For example, the
 function \\texttt{extract_from_summary} allows users to extract some subset of
 the items from each of the summary records. In this case, the names of the 
 journals in which these papers appeared can be isolated.
@@ -144,7 +144,7 @@ database. Our goal is to obtain sequence data, which is stored in the
 Nucleotide database. The function `entrez_link` can be used to find 
 records in one database that correspond to entries in another. In this case, a
 single call to `entrez_link` can identify human APP sequences in the nucleotide
-database in general and a number of restrictive subsets of that database in
+database in general and a restrictive subsets of that database in
 particular.
 
 ```{r, app_links}
@@ -212,18 +212,19 @@ library(gridExtra)
 #Create a common colour palette for both plots. 
 spp_by_phyl <- aggregate(spp ~ phylum, FUN=sum, data=animal_orders)
 phyla <- spp_by_phyl$phylum[ order(spp_by_phyl$spp, decreasing=TRUE)]
-pal <- structure( rep(RColorBrewer::brewer.pal(name="Set1", n=8),3), .Names=phyla)
+pal <- structure( rep(RColorBrewer::brewer.pal(name="Accent", n=6),4), .Names=phyla)
 animal_orders$fill <- pal[ animal_orders$phylum ]
 
-                 
+commafy <- function(n)  formatC(n, format = "d", big.mark = ",")
+             
 grid.newpage()
 pushViewport(viewport(layout = grid.layout(2, 2)))
 
 
-treemap(animal_orders, 
+tm <- treemap(animal_orders, 
         index=c("phylum", "class", "order"), vSize="spp", vColor="fill", 
         palette=pal, type='categorical', position.legend="none", 
-        title=paste0("Number of species (n = ", sum(animal_orders$spp), ")"),       
+        title=paste0("species (n = ", commafy(sum(animal_orders$spp)), ")"),       
         border.col=c("white","white","black"),
         vp = viewport(layout.pos.row = 1, layout.pos.col = 1)
 )
@@ -231,7 +232,7 @@ treemap(animal_orders,
 treemap(animal_orders, 
         index=c("phylum", "class", "order"), vSize="papers", vColor="fill", 
         palette=pal, type='categorical', position.legend="none", 
-        title=paste0("Number of papers (n = ", sum(animal_orders$papers), ")"),       
+        title=paste0("papers (n = ", commafy(sum(animal_orders$papers)), ")"),       
         border.col=c("white","white","black"),
         vp = viewport(layout.pos.row = 1, layout.pos.col = 2)
 )
@@ -239,7 +240,7 @@ treemap(animal_orders,
 treemap(animal_orders, 
         index=c("phylum", "class", "order"), vSize="sequences", vColor="fill", 
         palette=pal, type='categorical', position.legend="none", 
-        title=paste0("Number of sequences (n = ", sum(animal_orders$sequences), ")"),       
+        title=paste0("sequences (n = ", commafy(sum(animal_orders$sequences)), ")"),       
         border.col=c("white","white","black"),
         vp = viewport(layout.pos.row = 2, layout.pos.col = 1)
 )
@@ -247,7 +248,7 @@ treemap(animal_orders,
 treemap(animal_orders, 
         index=c("phylum", "class", "order"), vSize="genomes", vColor="fill", 
         palette=pal, type='categorical', position.legend="none",
-        title=paste0("Number of genomes (n = ", sum(animal_orders$genomes), ")"),       
+        title=paste0("genomes (n = ", commafy(sum(animal_orders$genomes)), ")"),       
         border.col=c("white","white","black"),
         vp = viewport(layout.pos.row = 2, layout.pos.col = 2)
 )      
