@@ -82,7 +82,7 @@ efetch        & Fetch complete records in a variety of formats. & \\texttt{entre
 Typically, a user will begin by using `entrez_search` to discover unique
 identifiers for database records matching particular criteria. For example, the
 following call takes advantage of the EUtils search syntax (which is described in the
-functoin's help page) to discover scientific papers that were published in 2017 
+function's help page) to discover scientific papers that were published in 2017 
 and contain the phrase "R Package" in their title.
 
 
@@ -110,18 +110,22 @@ In addition to matching each of the EUtils endpoints, \\pkg{rentrez} provides a
 utility functions that facilitate common workflows. For example, the
 function \\texttt{extract_from_summary} allows users to extract some subset of
 the items from each of the summary records. In this case, the names of the 
-journals in which these papers appeared can be isolated.
+journals that these papers appeared in can be isolated and the 
+resulting character vector can be used to identify the PubMed-indexed
+journals that have published the most R packages this year.
 
 ```{r, journal_names}
 journals <- extract_from_esummary(pkg_paper_summs, "fulljournalname")
-head(journals,3)
+journals_by_R_pkgs <- sort(table(journals), decreasing = TRUE)
+head(journals_by_R_pkgs,3)
+
 ```
 
 ## Demonstration: retrieving unique transcripts for a given gene
 
 The package includes an extensive vignette, which can be accessed from within an
 R session by typing `vignette(topic="rentrez_tutorial")`. This document combines
-extensive documentation on each of the EUtils endpoints with detailed workflows
+documentation on each of the EUtils endpoints with detailed workflows
 that combine different \\pkg{rentrez} functions to analyse biological data. Here
 I add an additional demonstration, illustrating how \\pkg{rentrez} can
 automate the process of retrieving DNA sequence data corresponding to mRNA
@@ -209,11 +213,12 @@ library(treemap)
 library(grid)
 library(gridExtra)
 
-#Create a common colour palette for both plots. 
-spp_by_phyl <- aggregate(spp ~ phylum, FUN=sum, data=animal_orders)
-phyla <- spp_by_phyl$phylum[ order(spp_by_phyl$spp, decreasing=TRUE)]
-pal <- structure( rep(RColorBrewer::brewer.pal(name="Accent", n=6),4), .Names=phyla)
-animal_orders$fill <- pal[ animal_orders$phylum ]
+# 24 phyla means some fill-colours will be re-used, ordering phylum factor by spp
+# will prevent any "major" phyla from getting the same colour.
+spp_per_phylum <- aggregate(spp ~ phylum, FUN=sum, data=animal_orders)
+phyla_ordered <- spp_per_phylum$phylum[ order(spp_per_phylum$spp, decreasing=TRUE)]
+animal_orders$phylum<- factor(animal_orders$phylum, levels=phyla_ordered)
+pal <-  rep(RColorBrewer::brewer.pal(8, name="Set1"), 3)
 
 commafy <- function(n)  formatC(n, format = "d", big.mark = ",")
              
@@ -221,16 +226,16 @@ grid.newpage()
 pushViewport(viewport(layout = grid.layout(2, 2)))
 
 
-tm <- treemap(animal_orders, 
-        index=c("phylum", "class", "order"), vSize="spp", vColor="fill", 
+treemap(animal_orders, 
+        index=c("phylum", "class", "order"), vSize="spp", vColor="phylum", 
         palette=pal, type='categorical', position.legend="none", 
         title=paste0("species (n = ", commafy(sum(animal_orders$spp)), ")"),       
-        border.col=c("white","white","black"),
+      border.col=c("white","white","black"),
         vp = viewport(layout.pos.row = 1, layout.pos.col = 1)
 )
 
 treemap(animal_orders, 
-        index=c("phylum", "class", "order"), vSize="papers", vColor="fill", 
+        index=c("phylum", "class", "order"), vSize="papers", vColor="phylum", 
         palette=pal, type='categorical', position.legend="none", 
         title=paste0("papers (n = ", commafy(sum(animal_orders$papers)), ")"),       
         border.col=c("white","white","black"),
@@ -238,7 +243,7 @@ treemap(animal_orders,
 )
 
 treemap(animal_orders, 
-        index=c("phylum", "class", "order"), vSize="sequences", vColor="fill", 
+        index=c("phylum", "class", "order"), vSize="sequences", vColor="phylum", 
         palette=pal, type='categorical', position.legend="none", 
         title=paste0("sequences (n = ", commafy(sum(animal_orders$sequences)), ")"),       
         border.col=c("white","white","black"),
@@ -246,7 +251,7 @@ treemap(animal_orders,
 )
 
 treemap(animal_orders, 
-        index=c("phylum", "class", "order"), vSize="genomes", vColor="fill", 
+        index=c("phylum", "class", "order"), vSize="genomes", vColor="phylum", 
         palette=pal, type='categorical', position.legend="none",
         title=paste0("genomes (n = ", commafy(sum(animal_orders$genomes)), ")"),       
         border.col=c("white","white","black"),
