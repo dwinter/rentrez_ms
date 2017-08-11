@@ -7,8 +7,8 @@
 The USA National Center for Biotechnology Information (NCBI) is one of the world's 
 largest and most important sources of biological data. At the time of writing, the NCBI
 PubMed database provided information on $27.5$ million journal
-articles, including $4.5$ million full text records. The NCBI
-Nucleotide Database (including GenBank) had data for $242.9$ million different sequences and dbSNP described $997.3$ 
+articles, including $4.6$ million full text records. The NCBI
+Nucleotide Database (including GenBank) had data for $243.3$ million different sequences and dbSNP described $997.3$ 
 million different genetic variants. Records from all of these databases can be 
 cross-referenced with the  $1.3$ 
 million species in the NCBI taxonomy, and PubMed entries can be searched for using a 
@@ -26,7 +26,7 @@ API.
 Here I describe \\pkg{rentrez}, a package which provides users with a simple and
 consistent interface to EUtils. In particular, this paper discusses the design 
 of the package, illustrates its use in biological research and demonstrate how 
-the provided functions an aid the development of other packages designed to 
+the provided functions can aid the development of other packages designed to 
 meet more specific goals.
 
 
@@ -38,9 +38,8 @@ particular records (in complete or summary form). The design of \\pkg{rentrez}
 mirrors that of EUtils, with each of these endpoints represented by a core
 function that has arguments named to match those used in the API documentation
 (Table \\ref{tab:core-ends}). The most important arguments to the R functions are
-documented, and each if help pages contain a reference to the relevant section of 
-the  EUtils documentation. 
-
+documented, and each help page contains a reference to the relevant section of 
+the EUtils documentation.
 
 \\begin{table}[]
 \\centering
@@ -60,7 +59,7 @@ efetch        & Fetch complete records in a variety of formats. & \\texttt{entre
 Typically, a user will begin by using `entrez_search` to discover unique
 identifiers for database records matching particular criteria. EUtils allows
 users to search against particular terms in each database (the terms available
-for a given databse can be retreived with the function `entrez_db_searchable`),
+for a given databse can be retrieved with the function `entrez_db_searchable`),
 and to combine queries with boolean operators. For example, the
 following call finds scientific papers that were published in 2017 
 and contain the phrase "R Package" in their title.
@@ -137,25 +136,24 @@ head(journals_by_R_pkgs,3)
 ##                                9
 ```
 
-
 ## Demonstration: retrieving unique transcripts for a given gene
 
 Records in the NCBI's various databases are heavily cross-referenced, allowing
 users to identify and download data related to particular papers, organisms or 
 genes. By providing a programatic interface to these records \\pkg{rentrez}
-allows R users to develop reproducable workflows that either download particular
+allows R users to develop reproducible workflows that either download particular
 datasets for further analysis or load them into an R session. Here I demonstrate
 such a workflow, downloading DNA sequences corresponding to unique
 mRNA transcripts of a particular gene in a particular species.
 
 
-Imagine a researcher wishes to retrieve the sequence of mRNA transcripts 
-associated with the gene that encodes Amyloid Beta Precursor Protein in humans 
-and that they know this gene is identified by the gene symbol `APP`. The NCBI
-database dealing with genetic loci (rather than particular sequences) is called
-"Gene", so the first step to recovering the sequence data is identifying the
-unique identifier associated with this gene in that database. This can be 
-achieved with `entrez_search`.
+Our aim is to retrieve the sequence of mRNA transcripts associated with the gene 
+that encodes Amyloid Beta Precursor Protein in humans. This gene symbol is 
+identified by the gene symbol `APP`. The NCBI database dealing with genetic loci 
+(rather than particular sequences) is called "Gene", so the first step to 
+recovering the sequence data is identifying the unique identifier associated with 
+this gene in that database. This can be achieved with `entrez_search`, using the
+gene symbol and species in the search term.
 
 
 
@@ -174,7 +172,7 @@ That means the next step is to identify Nucleotide records associated with
 the Gene record discovered in the search above. The function `entrez_link` can be 
 used to find cross-referenced records. In this case, a single call to 
 `entrez_link` can identify human APP sequences in the nucleotide database in 
-general and a restrictive subsets of that database in particular.
+general and in an number of restrictive subsets of that database.
 
 
 ```r
@@ -208,15 +206,15 @@ cat(substr(raw_recs, 1,306), "\\n...\\n")
 ## CCAGGTACCCACTGATGGTAATGCTGGCCTGCTGGCTGAACCCCAGATTGCCATGTTCTGTGGCAGACTG \n...\n
 ```
 
-Sequences retrieved in this way could be written to file using `write`.
-Alternatively, they can be analysed  within R using packages designed for
-sequence data. For instance, the data base be represented as a `DNAbin` object
-using the phylogenetics package \\CRANpkg{ape}.
+Sequences retrieved in this way could be written to file using `cat(raw_recs,
+file="APP_transcripts.fasta")`.Alternatively, they can be analysed within R 
+using packages designed for sequence data. For instance, the data can be 
+represented as a `DNAbin` object using the phylogenetic package \\CRANpkg{ape}.
 
 
 ```r
 tf <- tempfile()
-cat(raw_recs,file= tf)
+cat(raw_recs,file=tf)
 ape::read.dna(tf, format="fasta")
 ```
 
@@ -241,7 +239,7 @@ ape::read.dna(tf, format="fasta")
 ## 0.276 0.223 0.258 0.244
 ```
 
-The example given above provides a relatively simple example of how functions
+The worflow given above provides a relatively simple example of how functions
 provided by \\pkg{rentrez} can be used to identify, retrieve and analyse data
 from the NCBI's databases. The package includes an extensive vignette which
 documents each of the EUtils endpoints and demonstrates a number of detailed
@@ -255,10 +253,11 @@ package that provides a flexible interface to the entire the EUtils API. As a
 result the package does not provide functions for any particular analysis
 or return records in any of the object classes made available for biological
 data by other packages. Rather, it is hoped that by providing a reliable interface
-to the EUtils API that meets the NCBI's terms of use \\pkg{rentrez} will allow
+to the EUtils API that meets the NCBI's terms of use \\pkg{rentrez} will help 
 other developers to build packages for more specific use-cases. Indeed, the
 package has already been used to incorporate records from NCBI in packages dealing
-with sequence, phylogenetic and bibliographic data.
+with sequence phylogenetic and  bibliographic data (\\BIOpkg{genbankr}, 
+\\CRANpkg{rotl} \\CRANpkg{fulltext}).
 
 The software repository for this manuscript includes the code for a small
 package called "tidytaxonomy" that can be used to explore the taxonomic
@@ -311,16 +310,12 @@ head(animal_orders,3)
 ```
 ##     phylum       class            order species genomes sequences papers
 ## 1 Chordata Actinopteri    Lutjaniformes     279       0      9315      0
-## 2 Chordata Actinopteri     Gerreiformes      61       0       901      0
+## 2 Chordata Actinopteri     Gerreiformes      62       0       901      0
 ## 3 Chordata Actinopteri Priacanthiformes      34       0       602      0
 ```
 
-```r
-write.csv(animal_orders, file="animal_data.csv", row.names=FALSE)
-```
-
-The data generated by these functions can be visualised using treemaps. The
-following code block includes helper functions to produce similar 
+The data retrieved with these functions can be visualized using treemaps. 
+The following code block includes helper functions to produce similar 
 treemaps for each database included in the `animal_oders` data above using the 
 \\CRANpkg{treemap} package.
 
@@ -378,11 +373,11 @@ taxic_diversity_tm(animal_orders, "genomes",   "phylum", 2,2, pal)
 
 ## Continued development of \\pkg{rentrez}
 
-\pkg{rentrez} covers the complete EUtils API, is well-docmented at the function
+\pkg{rentrez} covers the complete EUtils API, is well-documented at the function
 and package level and includes an extensive test suite that covers
 internal functions as well as typical use-cases of the software. The current
-version of  \pkg{rentrez} is thus considered a stable release, and it is
-unlikelany y additional functionality will be added. The software is nevertheless
+version of  \\pkg{rentrez} is thus considered a stable release, and it is
+unlikely any additional functionality will be added. The software is nevertheless
 still actively maintained to keep pace with CRAN and NCBI policies and to fix
 any bugs that arise. Software issues, including bug reports and requests for help 
 with particular use-cases, are welcomed at the package's software repository:
@@ -391,7 +386,7 @@ http://gituhub.com/ropensci/rentrez.
 
 ## Acknowledgements
 
-Development of the \pkg{rentrez} has benefited greatly from being part of the
+Development of the \\pkg{rentrez} has benefited greatly from being part of the
 ROpenSci project. I am especially grateful to Scott Chamberlain for his guidance. 
 I am also very grateful to everyone how has provided  pull-requests or filed issues 
 including Chris Stubben, Karthik Ram, Han Guangchun, Matthew O'Meara, 
