@@ -5,7 +5,20 @@
 \maketitle
 
 \abstract{
-An abstract of less than 150 words.
+The USA National Center for Biotechnology Information (NCBI) is one of the
+world's most important sources of biological information. NCBI databases like
+PubMed and GenBank contain millions of records describing bibliographic,
+genetic, genomic, and medical data. Here I present \pkg{rentrez}, a package
+which provides and R interface to 50 NCBI databases. The package is
+well-documented, contains an extensive suite of unit tests and has an active
+user base. The programatic interface to the NCBI provided by \pkg{rentrez}
+allows researchers to query databases and download or import particular records
+into R sessions for subsequent analysis. The extensive test-suite,
+complete nature of the package and documentation and the fact the package
+impliments the NCBI's usage policies all make \pkg{rentrez} a powerful aid to
+developers creating new packages that perform specific tasks are import data or 
+a particular type.
+
 }
 
 \section{Introduction}
@@ -251,15 +264,21 @@ with sequence analysis (\BIOpkg{genbankr}, \citealt{genbankr}), retrieval of
 phylogenetic trees (\CRANpkg{rotl}, \citealt{rotl}) and handling of
 full-text journal articles (\CRANpkg{fulltext},\citealt{fulltext}).
 
-The software repository for this manuscript
-(\url{https://github.com/dwinter/rentrez_ms}) includes the code for a small
-package called "tidytaxonomy" that can be used to explore the taxonomic
-diversity of various NCBI databases. This code further  demonstrates they way the 
+New packages that take advantage of \pkg{rentrez} will usually focus on
+providing a simple interface to users, meaning researchers will need not to be
+familiar the syntax or arguments used in EUtils to perform tasks. Packages may
+also provide functions to parse files returned by \code{entrez\_fetch}, either
+to extract particular information from those files or represent them as R 
+objects. Here I present an example of a small package that performs both of
+these tasks.The software repository for this manuscript
+(\url{https://github.com/dwinter/rentrez_ms}) includes the code for a package 
+called ``tidytaxonomy'' that can be used to explore the taxonomic
+diversity of various NCBI databases. This demonstrates they way the 
 low-level code in \pkg{rentrez} can be used to develop specific applications 
 that have a much more simple interface can could be achieved with core 
 \pkg{rentrez} functions.
 
-The exposed functions from this package retrieve data from NCBI, but do not
+The exposed functions from ``tidytaxonomy'' retrieve data from NCBI, but do not
 require the user to have any knowledge of the EUtils API. Internal functions
 parse the XML formatted records returned from the NCBI Taxonomy database and
 extract relevant information. The core function \code{tidy\_taxonomy} allows 

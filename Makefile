@@ -5,15 +5,29 @@ winter.R: winter.Rmd
 	Rscript -e "knitr::purl('winter.Rmd')"
 
 Fig1.pdf: animal_data.csv
+
+clean:
+	rm -f RJ*.bbl RJ*.aux RJ*.blg RJ*.brf RJ*.log 	RJ*.out
+	rm -f winter_submission.tar.gz
 	./make_fig1.r
 
 winter.pdf: Fig1.pdf winter.tex
+	$(MAKE) clean
 	pdflatex RJwrapper.tex
 	bibtex RJwrapper
 	pdflatex RJwrapper.tex
 	pdflatex RJwrapper.tex
 	mv RJwrapper.pdf winter.pdf
 
-winter_submission.tar.gz: winter.pdf Fig1.pdf winter.R animal_data.csv
-	rm -f winter_submission.tar.gz
-	tar -czf winter_submission.tar.gz ../rentrez_ms
+rentrez_preprint.pdf: Fig1.pdf winter.tex
+	$(MAKE) clean
+	pdflatex RJpreprint.tex
+	bibtex RJpreprint
+	pdflatex RJpreprint.tex
+	pdflatex RJpreprint.tex
+	mv RJpreprint.pdf rentrez_preprint.pdf
+
+../winter_submission.tar.gz: winter.pdf Fig1.pdf winter.R animal_data.csv
+	$(MAKE) clean
+	tar -czf ../winter_submission.tar.gz ../rentrez_ms
+

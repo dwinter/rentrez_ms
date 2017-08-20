@@ -8,7 +8,20 @@ author:
     - line 2
     email:  d.winter@massey.ac.nz
 abstract: >
-  An abstract of less than 150 words.
+  The USA National Center for Biotechnology Information (NCBI) is one of the
+world's most important sources of biological information. NCBI databases like
+PubMed and GenBank contain millions of records describing bibliographic,
+genetic, genomic, and medical data. Here I present \pkg{rentrez}, a package
+which provides and R interface to 50 NCBI databases. The package is
+well-documented, contains an extensive suite of units tests and has an active
+user base. The programatic interface to the NCBI provided by \pkg{rentrez}
+allows researchers to query databases and download or import particular records
+into R sessions for subsequent analysis. In addition to directly supporting
+researchers, the package has been used to incorporate access to NCBI data in 
+packages aimed at specific tasks or types of data. The extensive test suite,
+complete nature of the package and documentation and the fact the package
+impliments the NCBI's usage policies all make \pkg{rentrez} a powerful aid to
+developers creating new packages that make use of NCBI data.
 output: 
     html_document:
         keep_md: true
