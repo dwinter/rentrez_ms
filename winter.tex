@@ -1,5 +1,5 @@
 % !TeX root = RJwrapper.tex
-\title{rentrez: An R package for the NCBI eutils API}
+\title{rentrez: An R package for the NCBI eUtils API}
 \author{by David J. Winter}
 
 \maketitle
@@ -32,7 +32,7 @@ controlled vocabulary containing $272$ thousand unique terms.
 
 The NCBI provides access to a total of $50$ databases 
 through a web interface, public FTP sites and an API called Entrez Programming
-Utilities (EUtils, \citealt{sayers_EUtils}). R packages from the Bioconductor 
+Utilities (eUtils, \citealt{sayers_EUtils}). R packages from the Bioconductor 
 project (e.g., \BIOpkg{genomes}, \citealt{genomes}; \BIOpkg{RMassBank}, 
 \citealt{RMassBank} and \BIOpkg{MeSHSim}, \citealt{MeSHSim}) or available from 
 CRAN (e.g., \CRANpkg{ape}, \citealt{APE}; \CRANpkg{RISmed}, \citealt{RISmed} and
@@ -40,24 +40,24 @@ CRAN (e.g., \CRANpkg{ape}, \citealt{APE}; \CRANpkg{RISmed}, \citealt{RISmed} and
 perform specific tasks. Two packages, \CRANpkg{rentrez} and \CRANpkg{reutils} 
 \citep{reutils}, provide functions that cover the entire API.  Here I describe 
 \pkg{rentrez}, a package which provides users with a simple and consistent 
-interface to EUtils. This paper discusses the design of the package, illustrates 
+interface to eUtils. This paper discusses the design of the package, illustrates 
 its use in biological research and demonstrates how the provided functions can 
 aid the development of other packages designed to meet more specific goals.
 
-\section{The EUtils API and \pkg{rentrez} }
+\section{The eUtils API and \pkg{rentrez} }
 
-The EUtils API provides endpoints for searching each of the databases it covers, 
+The eUtils API provides endpoints for searching each of the databases it covers, 
 finding cross-references among records in those databases and fetching 
 particular records (in complete or summary form). The design of \pkg{rentrez} 
-mirrors that of EUtils, with each of these endpoints represented by a core
+mirrors that of eUtils, with each of these endpoints represented by a core
 function that has arguments named to match those used in the API documentation
 (Table \ref{tab:core-ends}). The most important arguments to each R function are
 documented, and the help pages associated with these functions contain a reference 
-to the relevant section of the EUtils documentation.
+to the relevant section of the eUtils documentation.
 
-\begin{table}[]
-\centering
-\caption{Core EUtils endpoints and their \pkg{rentrez} counterparts}
+\begin{table}[h]% Table mid section is a bit odd, but letting it fall to bottom
+\centering      % breaks the next example block across two pages.
+\caption{Core eUtils endpoints and their \pkg{rentrez} counterparts}
 \label{tab:core-ends}
 \begin{tabular}{llll}
 \hline
@@ -121,7 +121,7 @@ pkg_paper_summs
 #> [40] chapter           sortpubdate       sortfirstauthor
 \end{example}
 
-In addition to matching each of the EUtils endpoints, \pkg{rentrez} provides
+In addition to matching each of the eUtils endpoints, \pkg{rentrez} provides
 utility functions that facilitate common workflows. For example, the
 function \code{extract\_from\_summary} allows users to extract some subset of
 the items contained in each of a set of summary records. In this case, the names of 
@@ -243,18 +243,18 @@ ape::read.dna(tf, format="fasta")
 The workflow detailed above provides a relatively simple example of how functions
 provided by \pkg{rentrez} can be used to identify, retrieve and analyse data
 from the NCBI's databases. The package includes an extensive vignette which
-documents each of the EUtils endpoints and demonstrates a number of detailed
+documents each of the eUtils endpoints and demonstrates a number of detailed
 workflows. This tutorial can be accessed from within an R session by typing 
 \code{vignette(topic="rentrez\_tutorial")}.
 
 \section{Demonstration: development of a new package}
 
 Development of \pkg{rentrez} has deliberately focused on producing a "low-level"
-package that provides a flexible interface to the entire the EUtils API. As a 
+package that provides a flexible interface to the entire the eUtils API. As a 
 result the package does not provide functions for any particular analysis
 or return records in any of the object classes made available for biological
 data by other packages. Rather, it is hoped that by providing a reliable interface
-to the EUtils API that meets the NCBI's terms of use \pkg{rentrez} will help 
+to the eUtils API that meets the NCBI's terms of use \pkg{rentrez} will help 
 other developers to build packages for more specific use-cases. Indeed, the
 package has already been used to integrate NCBI data into packages dealing
 with sequence analysis (\BIOpkg{genbankr}, \citealt{genbankr}), retrieval of
@@ -263,7 +263,7 @@ full-text journal articles (\CRANpkg{fulltext}, \citealt{fulltext}).
 
 New packages that take advantage of \pkg{rentrez} will usually focus on
 providing a simple interface to users, so researchers will not need to be
-familiar the syntax or arguments used in EUtils to perform tasks. Packages may
+familiar the syntax or arguments used in eUtils to perform tasks. Packages may
 also provide functions to parse files returned by \code{entrez\_fetch}, either
 to extract particular information from those files or represent them as R 
 objects. Here I present an example of a small package that performs both of
@@ -276,7 +276,8 @@ that have a simpler interface than could be achieved with core
 \pkg{rentrez} functions alone.
 
 The exposed functions from \code{tidytaxonomy} retrieve data from NCBI, but do not
-require the user to have any knowledge of the EUtils API. Internal functions
+require the user to have any knowledge of the eUtils API. Internal functions
+
 parse the XML formatted records returned from the NCBI Taxonomy database and
 extract relevant information. The core function \code{tidy\_taxonomy} allows 
 users to retrieve a part of the NCBI  Taxonomy database in `tidy data' format
@@ -337,7 +338,7 @@ nuclear genome sequences in NCBI Genome database.}
 
 \section{Continued development of \pkg{rentrez}}
 
-\pkg{rentrez} covers the complete EUtils API, is well-documented at the function
+\pkg{rentrez} covers the complete eUtils API, is well-documented at the function
 and package level and includes an extensive test suite that covers
 internal functions as well as typical use-cases of the software. The current
 version of \pkg{rentrez} is thus considered a stable release, and it is
