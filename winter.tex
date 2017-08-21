@@ -1,6 +1,6 @@
 % !TeX root = RJwrapper.tex
 \title{rentrez: An R package for the NCBI eutils API}
-\author{David J. Winter}
+\author{by David J. Winter}
 
 \maketitle
 
@@ -9,16 +9,14 @@ The USA National Center for Biotechnology Information (NCBI) is one of the
 world's most important sources of biological information. NCBI databases like
 PubMed and GenBank contain millions of records describing bibliographic,
 genetic, genomic, and medical data. Here I present \pkg{rentrez}, a package
-which provides and R interface to 50 NCBI databases. The package is
+which provides an R interface to 50 NCBI databases. The package is
 well-documented, contains an extensive suite of unit tests and has an active
-user base. The programatic interface to the NCBI provided by \pkg{rentrez}
+user base. The programmatic interface to the NCBI provided by \pkg{rentrez}
 allows researchers to query databases and download or import particular records
-into R sessions for subsequent analysis. The extensive test-suite,
-complete nature of the package and documentation and the fact the package
-impliments the NCBI's usage policies all make \pkg{rentrez} a powerful aid to
-developers creating new packages that perform specific tasks are import data or 
-a particular type.
-
+into R sessions for subsequent analysis. The complete nature of the package, 
+its extensive test-suite and the fact the package implements the NCBI's
+usage policies all make \pkg{rentrez} a powerful aid to developers of new
+packages that perform more specific tasks.
 }
 
 \section{Introduction}
@@ -29,7 +27,7 @@ PubMed database provided information on $27.5$ million journal
 articles, including $4.6$ million full text records. The NCBI
 Nucleotide Database (including GenBank) had data for $243.3$ million different sequences and dbSNP described $997.3$ 
 million different genetic variants. Records from all of these databases can be 
-cross-referenced with the $1.3$ million species in the NCBI taxonomy, and PubMed entries can be searched for using a 
+cross-referenced with the $1.3$ million species in the NCBI taxonomy, and PubMed entries can be searched using a 
 controlled vocabulary containing $272$ thousand unique terms. 
 
 The NCBI provides access to a total of $50$ databases 
@@ -43,9 +41,8 @@ perform specific tasks. Two packages, \CRANpkg{rentrez} and \CRANpkg{reutils}
 \citep{reutils}, provide functions that cover the entire API.  Here I describe 
 \pkg{rentrez}, a package which provides users with a simple and consistent 
 interface to EUtils. This paper discusses the design of the package, illustrates 
-its use in biological research and demonstrate how the provided functions can 
+its use in biological research and demonstrates how the provided functions can 
 aid the development of other packages designed to meet more specific goals.
-
 
 \section{The EUtils API and \pkg{rentrez} }
 
@@ -54,9 +51,9 @@ finding cross-references among records in those databases and fetching
 particular records (in complete or summary form). The design of \pkg{rentrez} 
 mirrors that of EUtils, with each of these endpoints represented by a core
 function that has arguments named to match those used in the API documentation
-(Table \ref{tab:core-ends}). The most important arguments to the R functions are
-documented, and each help page contains a reference to the relevant section of 
-the EUtils documentation.
+(Table \ref{tab:core-ends}). The most important arguments to each R function are
+documented, and the help pages associated with these functions contain a reference 
+to the relevant section of the EUtils documentation.
 
 \begin{table}[]
 \centering
@@ -66,7 +63,7 @@ the EUtils documentation.
 \hline
 NCBI endpoint & Purpose                                         & Core function            \\ \hline
 esearch       & Locate records matching search criteria.        & \texttt{entrez\_search}  \\
-elink         & Discover of cross-linked records.               & \texttt{entrez\_link}    \\ 
+elink         & Discover cross-linked records.                  & \texttt{entrez\_link}    \\ 
 esummary      & Fetch summary data on a set of records.         & \texttt{entrez\_summary} \\ 
 efetch        & Fetch complete records in a variety of formats. & \texttt{entrez\_fetch}   \\ \hline
 \end{tabular}
@@ -79,7 +76,7 @@ users to search against particular terms in each database (the terms available
 for a given database can be retrieved with the function
 \code{entrez\_db\_searchable}), and to combine queries with boolean operators. 
 For example, the following call finds scientific papers that were published in 2017 
-and contain the phrase ``R Package'' in their title.
+and contain the phrase `R Package' in their title.
 
 \begin{example}
 pubmed_search <- entrez_search(db="pubmed", 
@@ -148,7 +145,7 @@ head(journals_by_R_pkgs,3)
 
 Records in the NCBI's various databases are heavily cross-referenced, allowing
 users to identify and download data related to particular papers, organisms or 
-genes. By providing a programatic interface to these records \pkg{rentrez}
+genes. By providing a programmatic interface to these records \pkg{rentrez}
 allows R users to develop reproducible workflows that either download particular
 datasets for further analysis or load them into an R session. Here I demonstrate
 such a workflow, downloading DNA sequences corresponding to unique
@@ -158,7 +155,7 @@ Our aim is to retrieve the sequence of mRNA transcripts associated with the gene
 that encodes Amyloid Beta Precursor Protein in humans. This gene is identified 
 by the gene symbol \footnote{\url{http://www.genenames.org/}} \samp{APP}. The 
 NCBI database dealing with genetic loci (rather than particular sequences) is 
-called ``Gene'', so the first step to recovering the sequence data is identifying 
+called `Gene', so the first step to recovering the sequence data is discovering 
 the unique identifier associated with APP in this database. This can be 
 achieved with \code{entrez\_search}, using the gene symbol and species in the 
 search term.
@@ -171,15 +168,15 @@ app_gene
 #>  Search term (as translated):  "Homo sapiens"[Organism] AND APP[GENE]
 \end{example}
 
-We now have a unique identifier for APP in the Gene database. In oder to download 
-sequence for these genes we need to find records from the NCBI Nucleotide database 
+We now have a unique identifier for APP in the Gene database. In order to download 
+sequences for this gene we need to find records from the NCBI Nucleotide database 
 that are associated with the Gene record. The function \code{entrez\_link} can be 
 used to find cross-referenced records. In this case, a single call to 
 \code{entrez\_link} can identify human APP sequences in the nucleotide database in 
 general and in a number of restrictive subsets of that database.
 
 \begin{example}
-nuc_links <- entrez_link(dbfrom='gene', id=app_gene$ids, db='nuccore')
+nuc_links <- entrez_link(dbfrom="gene", id=app_gene$ids, db="nuccore")
 nuc_links$links
 
 #> elink result with information from 5 databases:
@@ -215,7 +212,7 @@ cat(raw_recs, file="APP_transcripts.fasta")
 \end{example}
 
 Alternatively, the sequences can be analysed within R using packages designed for 
-sequence data. In this case, the data can be represented as a \code{``DNAbin''} 
+sequence data. In this case, the data can be represented as a \code{'DNAbin'} 
 object using the phylogenetics package \CRANpkg{ape}.
 
 \begin{example}
@@ -262,28 +259,28 @@ other developers to build packages for more specific use-cases. Indeed, the
 package has already been used to integrate NCBI data into packages dealing
 with sequence analysis (\BIOpkg{genbankr}, \citealt{genbankr}), retrieval of
 phylogenetic trees (\CRANpkg{rotl}, \citealt{rotl}) and handling of
-full-text journal articles (\CRANpkg{fulltext},\citealt{fulltext}).
+full-text journal articles (\CRANpkg{fulltext}, \citealt{fulltext}).
 
 New packages that take advantage of \pkg{rentrez} will usually focus on
-providing a simple interface to users, meaning researchers will need not to be
+providing a simple interface to users, so researchers will not need to be
 familiar the syntax or arguments used in EUtils to perform tasks. Packages may
 also provide functions to parse files returned by \code{entrez\_fetch}, either
 to extract particular information from those files or represent them as R 
 objects. Here I present an example of a small package that performs both of
 these tasks.The software repository for this manuscript
 (\url{https://github.com/dwinter/rentrez_ms}) includes the code for a package 
-called ``tidytaxonomy'' that can be used to explore the taxonomic
-diversity of various NCBI databases. This demonstrates they way the 
+called `tidytaxonomy' that can be used to explore the taxonomic
+diversity of various NCBI databases. This demonstrates how the 
 low-level code in \pkg{rentrez} can be used to develop specific applications 
-that have a much more simple interface can could be achieved with core 
-\pkg{rentrez} functions.
+that have a simpler interface than could be achieved with core 
+\pkg{rentrez} functions alone.
 
-The exposed functions from ``tidytaxonomy'' retrieve data from NCBI, but do not
+The exposed functions from \code{tidytaxonomy} retrieve data from NCBI, but do not
 require the user to have any knowledge of the EUtils API. Internal functions
 parse the XML formatted records returned from the NCBI Taxonomy database and
 extract relevant information. The core function \code{tidy\_taxonomy} allows 
-users to retrieve a part of the NCBI  Taxonomy database in ``tidy data'' 
-\citep{tidy-data} format.
+users to retrieve a part of the NCBI  Taxonomy database in `tidy data' format
+\citep{tidy-data}.
 
 \begin{example}
 devtools::load_all("tidytaxon")
@@ -320,20 +317,20 @@ head(animal_orders,3)
 
 The resulting data can be used to visualise the taxonomic diversity of NCBI 
 databases (Figure \ref{fig:tm}). The Appendix to this paper 
-includes code that takes advantage of the \CRANpkg{treemap} \citep{treemap} to 
+includes code that takes advantage of \CRANpkg{treemap} \citep{treemap} to 
 produce these visualisations. 
 
 \begin{figure}
 \setkeys{Gin}{width=.8\textwidth}
 \begin{center}
 \includegraphics{Fig1}
-\caption{Taxonomic diversity of various NCBI database (considering only
+\caption{Taxonomic diversity of various NCBI databases (considering only
 animals). Panels in each plot are scaled to represent the number of database
 records corresponding to a given taxonomic rank and are shaded to reflect the
 phylum to which they belong. Starting from the upper left in clockwise direction
 subplots represent number of species in NCBI Taxonomy, the number of papers 
 in PubMed, the number of sequences in NCBI Nucleotide database and the number of 
-nuclear genome sequences in NCBI Genome database}
+nuclear genome sequences in NCBI Genome database.}
 \label{fig:tm}
 \end{center}
 \end{figure}
@@ -350,15 +347,23 @@ any bugs that arise. Software issues, including bug reports and requests for hel
 with particular use-cases, are welcomed at the package's software repository:
 \url{http://gituhub.com/ropensci/rentrez}.
 
-\section{ Acknowledgements}
+\section{Acknowledgements}
 
 Development of the \pkg{rentrez} has benefited greatly from being part of the
 ROpenSci project. I am especially grateful to Scott Chamberlain for his guidance. 
-I am also very grateful to everyone how has provided  pull-requests or filed issues 
+I am also very grateful to everyone who has provided pull-requests or filed issues 
 including Chris Stubben, Karthik Ram, Han Guangchun, Matthew O'Meara, 
 Reed Cartwright and Pavel Fedotov.
 
 \bibliography{RJreferences}
+
+\address{David J. Winter\\
+  Institute of Fundamental Sciences, Massey University\\
+  Palmerston North 4442\\
+  New Zealand\\
+  ORCiD: 0000-0002-6165-0029 \\
+  \email{david.winter@gmail.com}
+}
 
 \section{Appendix}
 
