@@ -8,7 +8,7 @@ Fig1.pdf: animal_data.csv
 
 clean:
 	rm -f RJ*.bbl RJ*.aux RJ*.blg RJ*.brf RJ*.log 	RJ*.out
-	rm -f winter_submission.tar.gz
+	rm -f winter_submission.zip
 
 winter.pdf: Fig1.pdf winter.tex
 	$(MAKE) clean
@@ -28,7 +28,7 @@ rentrez_preprint.pdf: Fig1.pdf winter.tex
 	pdflatex RJpreprint.tex
 	mv RJpreprint.pdf rentrez_preprint.pdf
 
-../winter_submission.tar.gz: winter.pdf Fig1.pdf winter.R animal_data.csv
+winter_submission.zip: winter.pdf Fig1.pdf winter.R animal_data.csv
 	$(MAKE) clean
-	tar -czf ../winter_submission.tar.gz ../rentrez_ms
+	cd ../; zip -r  rentrez_ms/winter_submission.zip rentrez_ms/Fig1.pdf rentrez_ms/animal_data.csv rentrez_ms/RJreferences.bib rentrez_ms/RJournal.sty rentrez_ms/RJwrapper.tex rentrez_ms/winter.tex rentrez_ms/winter.R rentrez_ms/winter.pdf rentrez_ms/make_fig1.r rentrez_ms/tidytaxon/
 
