@@ -250,7 +250,7 @@ workflows. This tutorial can be accessed from within an R session by typing
 \section{Demonstration: development of a new package}
 
 Development of \pkg{rentrez} has deliberately focused on producing a "low-level"
-package that provides a flexible interface to the entire the eUtils API. As a 
+package that provides a flexible interface to the entire eUtils API. As a 
 result the package does not provide functions for any particular analysis
 or return records in any of the object classes made available for biological
 data by other packages. Rather, it is hoped that by providing a reliable interface
@@ -263,7 +263,7 @@ full-text journal articles (\CRANpkg{fulltext}, \citealt{fulltext}).
 
 New packages that take advantage of \pkg{rentrez} will usually focus on
 providing a simple interface to users, so researchers will not need to be
-familiar the syntax or arguments used in eUtils to perform tasks. Packages may
+familiar with the syntax or arguments used in eUtils to perform tasks. Packages may
 also provide functions to parse files returned by \code{entrez\_fetch}, either
 to extract particular information from those files or represent them as R 
 objects. Here I present an example of a small package that performs both of
@@ -284,6 +284,7 @@ users to retrieve a part of the NCBI  Taxonomy database in `tidy data' format
 \citep{tidy-data}.
 
 \begin{example}
+# install.packages('devtools') # (If not already installed)
 devtools::load_all("tidytaxon")
 
 animal_orders <- tidy_taxonomy("animals", 
@@ -299,7 +300,7 @@ head(animal_orders,3)
 
 Once this data is obtained, two additional functions make it easy to include the
 number of records a given taxon has in a particular database. The function
-\code{taxon\_children} is specifically for counting Taxonomy records which are
+\code{taxon\_children} is specifically for counting taxonomy records which are
 subordinate to a given taxonomic group. The other function,  \code{taxon\_records}, 
 discovers records in any NCBI database.
 
@@ -346,12 +347,12 @@ unlikely any additional functionality will be added. The software is nevertheles
 still actively maintained to keep pace with CRAN and NCBI policies and to fix
 any bugs that arise. Software issues, including bug reports and requests for help 
 with particular use-cases, are welcomed at the package's software repository:
-\url{http://gituhub.com/ropensci/rentrez}.
+\url{http://github.com/ropensci/rentrez}.
 
 \section{Acknowledgements}
 
-Development of the \pkg{rentrez} has benefited greatly from being part of the
-ROpenSci project. I am especially grateful to Scott Chamberlain for his guidance. 
+Development of \pkg{rentrez} has benefited greatly from being part of the
+rOpenSci project. I am especially grateful to Scott Chamberlain for his guidance. 
 I am also very grateful to everyone who has provided pull-requests or filed issues 
 including Chris Stubben, Karthik Ram, Han Guangchun, Matthew O'Meara, 
 Reed Cartwright and Pavel Fedotov.
@@ -412,5 +413,5 @@ taxic_diversity_tm(animal_orders, "species",   "phylum", 1,1, pal)
 taxic_diversity_tm(animal_orders, "papers",    "phylum", 1,2, pal)
 taxic_diversity_tm(animal_orders, "sequences", "phylum", 2,1, pal)
 taxic_diversity_tm(animal_orders, "genomes",   "phylum", 2,2, pal)
-}
+
 \end{example}
