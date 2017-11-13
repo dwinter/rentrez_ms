@@ -15,14 +15,14 @@ to standard markdown (`winter.md`) and edit this file to create the a LaTeX
 document for submission. 
 
 So, if you want to check the code runs and play with the examples I give you can
-compile a html version of the manuscript text usinh `Make`:
+compile an html version of the manuscript text using `Make`:
 
 ```sh
 make winter.html
 ```
 
 If you want to compile the pdf that will be submitted to the journal you can
-instead type (but not now R code is run to produce this file)
+instead type the command blow (but note no R code is run to produce this file):
 
 ```sh
 make winter.pdf
