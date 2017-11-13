@@ -30,5 +30,5 @@ rentrez_preprint.pdf: Fig1.pdf winter.tex
 
 winter_submission.zip: winter.pdf Fig1.pdf winter.R animal_data.csv
 	$(MAKE) clean
-	cd ../; zip -r  rentrez_ms/winter_submission.zip rentrez_ms/Fig1.pdf rentrez_ms/animal_data.csv rentrez_ms/RJreferences.bib rentrez_ms/RJournal.sty rentrez_ms/RJwrapper.tex rentrez_ms/winter.tex rentrez_ms/winter.R rentrez_ms/winter.pdf rentrez_ms/make_fig1.r rentrez_ms/tidytaxon/
+	cd ../; zip -r  rentrez_ms/winter_submission.zip rentrez_ms/Fig1.pdf rentrez_ms/animal_data.csv rentrez_ms/winter.bib rentrez_ms/RJournal.sty rentrez_ms/RJwrapper.tex rentrez_ms/winter.tex rentrez_ms/winter.R rentrez_ms/winter.pdf rentrez_ms/make_fig1.r rentrez_ms/tidytaxon/ rentrez_ms/cover_letter.pdf
 
