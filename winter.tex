@@ -71,12 +71,16 @@ efetch        & Fetch complete records in a variety of formats. & \texttt{entrez
 
 
 Typically, a user will begin by using \code{entrez\_search} to discover unique
-identifiers for database records matching particular criteria. EUtils allows
-users to search against particular terms in each database (the terms available
-for a given database can be retrieved with the function
-\code{entrez\_db\_searchable}), and to combine queries with boolean operators. 
-For example, the following call finds scientific papers that were published in 2017 
-and contain the phrase `R Package' in their title.
+identifiers for database records matching particular criteria. This function
+requires a database (argument \code{db}) and a search term (argument
+\code{term}). The \code{term} argument can take advantage of the eUtils search
+syntax, in which queries can be associated with particular `search fields'
+(enclosed in square brackets), to limit the number of matching records. The fields 
+available for a given  database can be retrieved with the function
+\code{entrez\_db\_searchable}. The following call demonstrates the use of
+this search syntax. This query finds scientific papers that contain the 
+phrase `R Package' in their title while limiting the result to include only papers
+published in 2017.
 
 \begin{example}
 pubmed_search <- entrez_search(db="pubmed", 
@@ -88,13 +92,21 @@ pubmed_search
 #>  Search term (as translated):  R package[TITL] AND 2017[PDAT]
 \end{example}
 
-The object returned by \code{entrez\_search} can contain identifiers for records that
-match the given search term or a \code{web\_history} object that serves as a reference 
-to a set of identifiers stored on the NCBI's servers. Identifiers or
-\code{web\_history} objects can be passed to the other core functions to retrieve
-information about the records they represent. For example, a call to
-\code{entrez\_summary} returns information about each paper identified in the search
-above.
+
+For the most part, the objects returned by \pkg{rentrez} functions are S3
+objects that inherit from \code{"list"} objects. Each of these classes
+has its own \code{print} method, providing users with a succint summary of the
+object's contents. In this case, \code{entrez\_search} returns a an \code{"esearch"},
+object and the print method describes the number of records matching the query. These objects
+also contain either a character vector containing the unique identifiers of
+records that match the query or a \code{"web\_history"} object that serves as a reference 
+to this set of identifiers stored on the NCBI's servers. These
+\code{"web\_history"} objects are useful when dealing with large numbers of
+records, as they reduce the number of identifiers that need to be exchanged
+between a user and NCBI servers. Both identifiers and \code{"web\_history"} 
+objects can be passed to the other core functions to retrieve information about 
+the records they represent. For example, a call to \code{entrez\_summary} returns 
+information about each paper identified in the search above.
 
 
 \begin{example}
@@ -123,9 +135,9 @@ pkg_paper_summs
 
 In addition to matching each of the eUtils endpoints, \pkg{rentrez} provides
 utility functions that facilitate common workflows. For example, the
-function \code{extract\_from\_summary} allows users to extract some subset of
+function \code{extract\_from\_esummary} allows users to extract some subset of
 the items contained in each of a set of summary records. In this case, the names of 
-the  journals that these papers appeared in can be retrieved. The  resulting 
+the  journals that these papers appeared in can be retrieved. The resulting 
 character vector can then be used to identify the PubMed-indexed journals that 
 have published the most papers describing R packages this year.
 
@@ -140,6 +152,7 @@ head(journals_by_R_pkgs,3)
 #>      Molecular ecology resources 
 #>                                9
 \end{example}
+
 
 \section{Demonstration: retrieving unique transcripts for a given gene}
 
@@ -244,8 +257,9 @@ The workflow detailed above provides a relatively simple example of how function
 provided by \pkg{rentrez} can be used to identify, retrieve and analyse data
 from the NCBI's databases. The package includes an extensive vignette which
 documents each of the eUtils endpoints and demonstrates a number of detailed
-workflows. This tutorial can be accessed from within an R session by typing 
-\code{vignette(topic="rentrez\_tutorial")}.
+workflows. This document also describes how analyses can be scaled to analyse
+much larger datasets than are described in this paper. The tutorial can be 
+accessed from within an R session by typing  \code{vignette(topic="rentrez\_tutorial")}.
 
 \section{Demonstration: development of a new package}
 
